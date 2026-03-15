@@ -42,20 +42,25 @@ const getProductById = async (req, res, next) => {
         next(error);
     }
 };
-const createProduct = async(req,res,next)=>{
-    const{name,description,price,quantity} = req.body;
-    if(!name || !price || price<=0){
-        return res.status(400).send("please enter valid details");
+const createProduct = async (req, res,next) => {
+    const { name, price, quantity } = req.body;
+    
+    try {
+        const [newProduct] = await knex('products')
+            .insert({ name, price })
+            .returning('*');
+
+        await knex('inventory').insert({
+            product_id: newProduct.id,
+            quantity: quantity || 0
+        });
+
+        res.status(201).json({ ...newProduct, quantity });
+        
+    } catch (error) {
+        next();
     }
-    const trx =await knex.transaction();
-    try{
-        const[product]=await trx('products').insert({name,description,price}).returning('*');
-        await trx('inventory').insert({product_id:product.id,quantity:quantity||0});
-        await trx.commit();
-        res.status(201).json({success:true});
-    }catch(error){
-        next(error);
-    }
+
 };
 const updateProduct = async(req, res , next) => {
     const { price, quantity } = req.body;
