@@ -1,0 +1,10 @@
+.git
+**/node_modules
+**/build
+**/coverage
+**/.env*
+**/.npmrc
+**/*.log
+.agents
+.codex
+.aws

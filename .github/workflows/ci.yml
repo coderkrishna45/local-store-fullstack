@@ -1,0 +1,34 @@
+name: CI
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            LocalStore-backend/package-lock.json
+            local-store-frontend/package-lock.json
+      - run: npm ci
+        working-directory: LocalStore-backend
+      - run: npm test
+        working-directory: LocalStore-backend
+      - run: npm audit --omit=dev
+        working-directory: LocalStore-backend
+      - run: npm ci
+        working-directory: local-store-frontend
+      - run: npm test
+        working-directory: local-store-frontend
+      - run: npm audit
+        working-directory: local-store-frontend
+      - run: npm run build
+        working-directory: local-store-frontend
+      - run: docker build -t localstore:ci .

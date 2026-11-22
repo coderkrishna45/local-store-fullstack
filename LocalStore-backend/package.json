@@ -4,22 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "node --watch index.js",
+    "seed": "node seeder.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.11.0",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "knex": "^3.1.0",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.6.2",
     "morgan": "^1.10.1",
-    "pg": "^8.20.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.14"
+    "multer": "^2.1.1"
   }
 }
